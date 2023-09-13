@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MeetingRoomLandingPage(),
+      home: const SearchRoomPage(),
     );
   }
 }
@@ -168,4 +168,165 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
       ),
     );
   }
+}
+
+class SearchRoomPage extends StatefulWidget {
+  const SearchRoomPage({super.key});
+
+  @override
+  State<SearchRoomPage> createState() => _SearchRoomPageState();
+}
+
+class _SearchRoomPageState extends State<SearchRoomPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const MeetRoomAppBar(),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(22, 30, 22, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Date'),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 45,
+              child: const ColoredBox(
+                color: const Color(0xFF5CC99B),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text('Start Time'),
+            Container(
+              color: const Color(0xFF5CC99B),
+              width: MediaQuery.of(context).size.width,
+              height: 45,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text('End Time'),
+            Container(
+              color: const Color(0xFF5CC99B),
+              width: MediaQuery.of(context).size.width,
+              height: 45,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text('Available Room'),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 20,
+                ),
+                itemCount: 20,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, border: Border.all()),
+                      width: MediaQuery.of(context).size.width,
+                      height: 75,
+                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      child: Row(
+                        children: [
+                          Text('Room A00${index + 1}'),
+                          const Spacer(),
+                          Text('20 Guest Max')
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MeetRoomAppBar extends StatelessWidget with PreferredSizeWidget {
+  const MeetRoomAppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(22, 0, 22, 16),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+        color: Color(0xFF191919),
+        image: DecorationImage(
+          image: AssetImage('assets/app_bar_cover.png'),
+          fit: BoxFit.fitHeight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(75, 0, 0, 0),
+            blurRadius: 4,
+            offset: Offset(4, 8), // Shadow position
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                InkWell(
+                  onTap: () {},
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Logout',
+                    style: TextStyle(
+                      fontFamily: 'Open Sans',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      height: 1.5,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  'Select Meeting Room',
+                  style: TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(120);
 }
