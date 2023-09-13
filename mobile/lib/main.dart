@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -178,6 +181,50 @@ class SearchRoomPage extends StatefulWidget {
 }
 
 class _SearchRoomPageState extends State<SearchRoomPage> {
+  DateTime? pickedDate;
+  DateTime? pickedStartTime;
+  DateTime? pickedEndTime;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
+
+  final dio = Dio();
+
+  final List<Room> roomList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    pickedDate = DateTime.now();
+  }
+
+  Future<void> getAllMeetingRoom({
+    required DateTime pickedStartTime,
+    required DateTime pickedEndTime,
+  }) async {
+    try {
+      Response response = await dio.get('http://localhost:8080/rooms', queryParameters: {
+        "startTime": pickedStartTime.toIso8601String(),
+        "endTime": pickedEndTime.toIso8601String(),
+      });
+
+      roomList.clear();
+
+      if (response.statusCode == 200) {
+        List roomRes = response.data;
+        for (var data in roomRes) {
+          Room room = Room.fromJson(data);
+          roomList.add(room);
+        }
+        setState(() {});
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      rethrow;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -189,30 +236,120 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Date'),
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 45,
-              child: const ColoredBox(
+            InkWell(
+              onTap: () => showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2023),
+                lastDate: DateTime(2023, 12, 31),
+                currentDate: pickedDate,
+              ).then((selectedDate) {
+                if (selectedDate != null) {
+                  setState(() {
+                    pickedDate = selectedDate;
+                  });
+                }
+              }),
+              child: Container(
                 color: const Color(0xFF5CC99B),
+                width: MediaQuery.of(context).size.width,
+                height: 45,
+                child: Center(
+                  child: Text(
+                    DateFormat.yMMMMd().format(pickedDate!),
+                  ),
+                ),
               ),
             ),
             SizedBox(
               height: 15,
             ),
-            Text('Start Time'),
-            Container(
-              color: const Color(0xFF5CC99B),
-              width: MediaQuery.of(context).size.width,
-              height: 45,
+            Row(
+              children: [
+                Expanded(child: Text('Start Time')),
+                SizedBox(
+                  width: 15,
+                ),
+                Expanded(child: Text('End Time')),
+              ],
             ),
-            SizedBox(
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => showTimePicker(context: context, initialTime: TimeOfDay.now()).then((selectedStartTime) {
+                      if (selectedStartTime != null) {
+                        setState(() {
+                          startTime = selectedStartTime;
+                          pickedStartTime = DateTime(
+                            pickedDate!.year,
+                            pickedDate!.month,
+                            pickedDate!.day,
+                            selectedStartTime.hour,
+                            selectedStartTime.minute,
+                          );
+                        });
+                      }
+                    }),
+                    child: Container(
+                      color: const Color(0xFF5CC99B),
+                      height: 45,
+                      child: Center(
+                        child: Text("${startTime?.format(context)}"),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                // Text('End Time'),
+                Expanded(
+                  child: InkWell(
+                    onTap: () => showTimePicker(context: context, initialTime: TimeOfDay.now()).then((selectedEndTime) {
+                      if (selectedEndTime != null) {
+                        setState(() {
+                          endTime = selectedEndTime;
+                          pickedEndTime = DateTime(
+                            pickedDate!.year,
+                            pickedDate!.month,
+                            pickedDate!.day,
+                            selectedEndTime.hour,
+                            selectedEndTime.minute,
+                          );
+                        });
+                        //
+                      }
+                    }),
+                    child: Container(
+                      color: const Color(0xFF5CC99B),
+                      height: 45,
+                      child: Center(
+                        child: Text("${endTime?.format(context)}"),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
               height: 15,
             ),
-            Text('End Time'),
-            Container(
-              color: const Color(0xFF5CC99B),
+            SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 45,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF5CC99B),
+                ),
+                onPressed: pickedStartTime != null && pickedEndTime != null
+                    ? () async => await getAllMeetingRoom(
+                          pickedStartTime: pickedStartTime!,
+                          pickedEndTime: pickedEndTime!,
+                        )
+                    : null,
+                child: Text('Search'),
+              ),
             ),
             SizedBox(
               height: 30,
@@ -226,7 +363,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                 separatorBuilder: (context, index) => const SizedBox(
                   height: 20,
                 ),
-                itemCount: 20,
+                itemCount: roomList.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {},
@@ -234,12 +371,12 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, border: Border.all()),
                       width: MediaQuery.of(context).size.width,
                       height: 75,
-                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: Row(
                         children: [
-                          Text('Room A00${index + 1}'),
+                          Text('Room A00${roomList[index].id}'),
                           const Spacer(),
-                          Text('20 Guest Max')
+                          Text('${roomList[index].capacity} Guest Max')
                         ],
                       ),
                     ),
@@ -250,6 +387,32 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class Room {
+  final int? id;
+  final String? name;
+  final int? capacity;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  Room({
+    this.id,
+    this.name,
+    this.capacity,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory Room.fromJson(Map<String, dynamic>? data) {
+    return Room(
+      id: data?['id'],
+      name: data?['name'],
+      capacity: data?['capacity'],
+      createdAt: DateTime.parse(data?['createdAt']),
+      updatedAt: DateTime.parse(data?['updatedAt']),
     );
   }
 }
@@ -270,6 +433,7 @@ class MeetRoomAppBar extends StatelessWidget with PreferredSizeWidget {
         image: DecorationImage(
           image: AssetImage('assets/app_bar_cover.png'),
           fit: BoxFit.fitHeight,
+          colorFilter: ColorFilter.mode(Color.fromARGB(80, 0, 0, 0), BlendMode.overlay),
         ),
         boxShadow: [
           BoxShadow(
