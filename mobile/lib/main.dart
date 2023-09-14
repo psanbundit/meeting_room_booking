@@ -15,9 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Palo IT Meeting Room Booking App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        useMaterial3: true,
+        colorSchemeSeed: const Color(0xFF5CC99B),
       ),
-      home: const SearchRoomPage(),
+      home: const MeetingRoomLandingPage(),
     );
   }
 }
@@ -111,53 +112,63 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                       ),
                     ),
                     const Spacer(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 75,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          splashFactory: NoSplash.splashFactory,
-                          backgroundColor: const Color(0xFF5CC99B),
-                        ),
-                        onPressed: () {},
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            fontFamily: 'Open Sans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            height: 1.5,
-                            color: Colors.white,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 75,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                splashFactory: NoSplash.splashFactory,
+                                backgroundColor: const Color(0xFF5CC99B),
+                              ),
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => SearchRoomPage(),
+                                ),
+                              ),
+                              child: const Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.5,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 75,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          splashFactory: NoSplash.splashFactory,
-                          side: const BorderSide(
-                            color: Color(0xFF5CC99B),
-                            width: 1,
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            height: 75,
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                splashFactory: NoSplash.splashFactory,
+                                side: const BorderSide(
+                                  color: Color(0xFF5CC99B),
+                                  width: 1,
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: const Text(
+                                'Sign up',
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1.5,
+                                  color: Color(0xFF5CC99B),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        onPressed: () {},
-                        child: const Text(
-                          'Sign up',
-                          style: TextStyle(
-                            fontFamily: 'Open Sans',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            height: 1.5,
-                            color: Color(0xFF5CC99B),
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
                     const SizedBox(
                       height: 40,
@@ -197,7 +208,13 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
     pickedDate = DateTime.now();
   }
 
-  Future<void> getAllMeetingRoom({
+  @override
+  void dispose() {
+    print('-----=------');
+    super.dispose();
+  }
+
+  Future<void> getAllMeetingRooms({
     required DateTime pickedStartTime,
     required DateTime pickedEndTime,
   }) async {
@@ -343,7 +360,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                   backgroundColor: const Color(0xFF5CC99B),
                 ),
                 onPressed: pickedStartTime != null && pickedEndTime != null
-                    ? () async => await getAllMeetingRoom(
+                    ? () async => await getAllMeetingRooms(
                           pickedStartTime: pickedStartTime!,
                           pickedEndTime: pickedEndTime!,
                         )
@@ -366,7 +383,17 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                 itemCount: roomList.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () {},
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MeetingRoomDetail(),
+                        settings: RouteSettings(
+                          name: 'meeting_room_detail',
+                          arguments: {
+                            "id": roomList[index].id,
+                          },
+                        ),
+                      ),
+                    ),
                     child: Container(
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, border: Border.all()),
                       width: MediaQuery.of(context).size.width,
@@ -449,26 +476,33 @@ class MeetRoomAppBar extends StatelessWidget with PreferredSizeWidget {
             Row(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () => Navigator.pop(context),
                   child: const Icon(
                     Icons.arrow_back,
                     color: Colors.white,
                   ),
                 ),
                 const Spacer(),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Logout',
-                    style: TextStyle(
-                      fontFamily: 'Open Sans',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      height: 1.5,
-                      color: Colors.white,
-                    ),
+                InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(
+                    Icons.exit_to_app,
+                    color: Colors.red,
                   ),
                 ),
+                // TextButton(
+                //   onPressed: () {},
+                //   child: Text(
+                //     'Logout',
+                //     style: TextStyle(
+                //       fontFamily: 'Open Sans',
+                //       fontSize: 16,
+                //       fontWeight: FontWeight.w400,
+                //       height: 1.5,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             Row(
@@ -493,4 +527,50 @@ class MeetRoomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(120);
+}
+
+class MeetingRoomDetail extends StatefulWidget {
+  const MeetingRoomDetail({
+    super.key,
+  });
+
+  @override
+  State<MeetingRoomDetail> createState() => _MeetingRoomDetailState();
+}
+
+class _MeetingRoomDetailState extends State<MeetingRoomDetail> {
+  final dio = Dio();
+  Room? roomDetail;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Map<String, dynamic>? data = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      await getMeetingRoom(data?['id']).whenComplete(() {
+        setState(() {});
+      });
+    });
+  }
+
+  Future<void> getMeetingRoom(int? id) async {
+    try {
+      Response response = await dio.get('http://localhost:8080/rooms/$id');
+
+      if (response.statusCode == 200) {
+        roomDetail = Room.fromJson(response.data);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(roomDetail?.name ?? '-'),
+      ),
+    );
+  }
 }
