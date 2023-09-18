@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "room")
 public class Room {
@@ -24,6 +26,8 @@ public class Room {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     private Boolean isActive;
+    @OneToMany(mappedBy = "room")
+    private List<Booking> bookings;
 
     @PrePersist
     protected void onCreate() {

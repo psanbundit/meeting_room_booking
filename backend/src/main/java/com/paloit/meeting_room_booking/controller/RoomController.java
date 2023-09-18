@@ -84,6 +84,7 @@ public class RoomController {
         }
         Boolean isDeleted = this.roomService.deleteRoom(id);
         if(!isDeleted){
+            response.setData(false);
             response.setError("Delete room error");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }

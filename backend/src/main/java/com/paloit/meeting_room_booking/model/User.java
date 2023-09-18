@@ -1,4 +1,4 @@
-package com.paloit.meeting_room_booking.dbmodel;
+package com.paloit.meeting_room_booking.model;
 
 import jakarta.persistence.*;
 import java.util.List;

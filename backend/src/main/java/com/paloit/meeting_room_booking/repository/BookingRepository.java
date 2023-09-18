@@ -1,6 +1,6 @@
 package com.paloit.meeting_room_booking.repository;
 
-import com.paloit.meeting_room_booking.dbmodel.Booking;
+import com.paloit.meeting_room_booking.model.Booking;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

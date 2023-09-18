@@ -1,6 +1,6 @@
 package com.paloit.meeting_room_booking.service;
 
-import com.paloit.meeting_room_booking.dbmodel.User;
+import com.paloit.meeting_room_booking.model.User;
 import com.paloit.meeting_room_booking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
