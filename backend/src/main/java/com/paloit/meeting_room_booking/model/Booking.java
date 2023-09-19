@@ -1,9 +1,8 @@
 package com.paloit.meeting_room_booking.model;
 
-import com.paloit.meeting_room_booking.dbmodel.Room;
-import com.paloit.meeting_room_booking.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "booking")
@@ -24,7 +23,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-    private com.paloit.meeting_room_booking.dbmodel.Room room;
+    private Room room;
 
     public long getId() {
         return id;
@@ -66,7 +65,7 @@ public class Booking {
         this.user = user;
     }
 
-    public com.paloit.meeting_room_booking.dbmodel.Room getRoom() {
+    public Room getRoom() {
         return room;
     }
 
