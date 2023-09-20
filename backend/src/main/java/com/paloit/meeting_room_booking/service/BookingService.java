@@ -29,6 +29,16 @@ public class BookingService {
         return this.bookingRepository.findAll();
     }
 
+    public List<Booking> getAllBookingByUserId(Long userId) {
+        return this.bookingRepository.findByUserId(userId);
+    }
+
+    public List<Booking> getAllBookingByUserIdAndStatus(Long userId, BookingStatus status) {
+        if(status == BookingStatus.ALL){
+            return this.bookingRepository.findByUserId(userId);
+        }
+        return this.bookingRepository.findByUserIdAndStatus(userId, status.toString());
+    }
     public Optional<Booking> getById(Long id) {
         return this.bookingRepository.findById(id);
     }

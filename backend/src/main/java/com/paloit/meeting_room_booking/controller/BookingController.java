@@ -2,6 +2,7 @@ package com.paloit.meeting_room_booking.controller;
 
 
 
+import com.paloit.meeting_room_booking.model.BookingStatus;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import com.paloit.meeting_room_booking.service.BookingService;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -68,6 +70,19 @@ public class BookingController {
         }
         response.setData(booking);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<BaseResponse<List<Booking>>> getMyBooking(@RequestParam("status") BookingStatus status) {
+//        TODO: Mocking user id
+        Long userId = (long) 2;
+        List<Booking> list = this.bookingService.getAllBookingByUserIdAndStatus(userId, status);
+        BaseResponse<List<Booking>> response = new BaseResponse<>();
+        if (userId <= 0) {
+            response.setError("User Id should be Long and greater than 0 ");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response.setData(list));
     }
 
 }
