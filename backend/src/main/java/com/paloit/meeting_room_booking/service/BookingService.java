@@ -7,14 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paloit.meeting_room_booking.model.Booking;
+import com.paloit.meeting_room_booking.model.BookingStatus;
+import com.paloit.meeting_room_booking.model.FormBooking;
+import com.paloit.meeting_room_booking.model.Room;
 import com.paloit.meeting_room_booking.model.User;
 import com.paloit.meeting_room_booking.repository.BookingRepository;
+import com.paloit.meeting_room_booking.repository.RoomRepository;
+import com.paloit.meeting_room_booking.repository.UserRepository;
 
 @Service
 public class BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     public List<Booking> getAllBooking() {
         return this.bookingRepository.findAll();
@@ -24,7 +33,18 @@ public class BookingService {
         return this.bookingRepository.findById(id);
     }
 
-    public Booking createBooking(Booking booking) {
+    public Booking createBooking(Long userId, Long roomId, FormBooking formBooking) {
+        Booking booking = new Booking();
+        User user = this.userRepository.findById(userId).orElse(null);
+        Room room = this.roomRepository.findById(roomId).orElse(null);
+        if (user == null || room == null) {
+            return null;
+        }
+        booking.setUser(user);
+        booking.setRoom(room);
+        booking.setStart(formBooking.getStart());
+        booking.setEnd(formBooking.getEnd());
+        booking.setStatus(BookingStatus.RESERVED.toString());
         return this.bookingRepository.save(booking);
     }
 
