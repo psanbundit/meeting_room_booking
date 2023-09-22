@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meeting_room_booking/pages/landing_page/page/landing_page.dart';
 
 class Routes {
   late final router = GoRouter(
@@ -12,7 +13,7 @@ class Routes {
         pageBuilder: (context, state) {
           return buildPage(
             key: state.pageKey,
-            child: const Scaffold(),
+            child: const MeetingRoomLandingPage(),
             arguments: state.extra,
           );
         },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_room_booking/search_room/page/search_room_page.dart';
+import 'package:meeting_room_booking/pages/search_room/page/search_room_page.dart';
 
 class MeetingRoomLandingPage extends StatefulWidget {
   const MeetingRoomLandingPage({super.key});

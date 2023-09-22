@@ -19,9 +19,9 @@ class MainLocalization extends LocalizationConfig {
 
   @override
   Future<void> start() async {
-    final forceReload = dotenv.get('STAGE') == 'dev';
-    for (final locale in supportedLocales) {
-      await loadTranslation(locale, forceReload);
-    }
+    // final forceReload = dotenv.get('STAGE') == 'dev';
+    // for (final locale in supportedLocales) {
+    //   await loadTranslation(locale, true);
+    // }
   }
 }

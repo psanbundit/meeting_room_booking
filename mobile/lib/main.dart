@@ -6,7 +6,7 @@ import 'package:meeting_room_booking/meeting_room_booking_roots.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load();
+  // await dotenv.load();
   final args = <String, dynamic>{};
 
   Logger.init(
