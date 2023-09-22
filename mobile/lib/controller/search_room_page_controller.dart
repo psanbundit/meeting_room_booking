@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meeting_room_booking/model/room.dart';
+import 'package:meeting_room_booking/models/room.dart';
 
 class SearchRoomPageController {
   final Dio dio = Dio();

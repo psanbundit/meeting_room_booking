@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:meeting_room_booking/model/room.dart';
+import 'package:meeting_room_booking/models/room.dart';
 
 class DetailPageController {
   final Dio dio = Dio();

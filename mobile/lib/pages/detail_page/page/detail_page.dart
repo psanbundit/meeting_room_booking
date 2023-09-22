@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:meeting_room_booking/controller/detail_page_controller.dart';
-import 'package:meeting_room_booking/model/room.dart';
+import 'package:meeting_room_booking/models/room.dart';
 
 class MeetingRoomDetailPage extends StatefulWidget {
   const MeetingRoomDetailPage({

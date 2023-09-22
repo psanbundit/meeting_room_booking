@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meeting_room_booking/common/common_app_bar.dart';
 import 'package:meeting_room_booking/controller/search_room_page_controller.dart';
-import 'package:meeting_room_booking/model/room.dart';
-import 'package:meeting_room_booking/page/detail_page.dart';
+import 'package:meeting_room_booking/models/room.dart';
+import 'package:meeting_room_booking/detail_page/page/detail_page.dart';
 
 class SearchRoomPage extends StatefulWidget {
   const SearchRoomPage({super.key});
