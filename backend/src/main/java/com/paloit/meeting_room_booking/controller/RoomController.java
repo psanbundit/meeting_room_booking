@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,19 @@ public class RoomController {
         BaseResponse<List<Room>> response = new BaseResponse<>();
         return  ResponseEntity.status(HttpStatus.OK).body(response.setData(list));
     }
+
+    @GetMapping("/available")
+    public ResponseEntity<BaseResponse<List<Room>>> getAvailableRoom(@RequestParam("startTime") LocalDateTime startTime, @RequestParam("endTime") LocalDateTime endTime){
+        BaseResponse<List<Room>> response = new BaseResponse<>();
+        if(startTime == null || endTime == null){
+            response.setError("Start time and end time must not be null");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        List<Room> list = this.roomService.getAvailableRoomsInPeriod(startTime, endTime);
+        response.setData(list);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<Optional<Room>>> getRoomById(@PathVariable Long id){
         Optional<Room> room = this.roomService.getById(id);

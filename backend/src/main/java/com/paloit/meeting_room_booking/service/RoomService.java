@@ -6,6 +6,8 @@ import com.paloit.meeting_room_booking.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +39,14 @@ public class RoomService {
         room.get().setActive(formRoom.getActive() == null ? room.get().getActive() : formRoom.getActive());
         this.roomRepository.save(room.get());
         return room.get();
+    }
+
+    public List<Room> getAvailableRoomsInPeriod(
+            LocalDateTime startTime, LocalDateTime endTime) {
+        if(startTime.isAfter(endTime) || startTime.isEqual(endTime)){
+            return new ArrayList<>();
+        }
+        return roomRepository.findAvailableRoomsInPeriod(startTime, endTime);
     }
 
     public Boolean deleteRoom(Long id) {
