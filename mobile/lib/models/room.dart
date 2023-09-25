@@ -1,25 +1,36 @@
 class Room {
-  final int? id;
-  final String? name;
-  final int? capacity;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  int? id;
+  String? name;
+  int? capacity;
+  String? createdAt;
+  String? updatedAt;
+  bool? active;
 
-  Room({
-    this.id,
-    this.name,
-    this.capacity,
-    this.createdAt,
-    this.updatedAt,
-  });
+  Room(
+      {this.id,
+      this.name,
+      this.capacity,
+      this.createdAt,
+      this.updatedAt,
+      this.active});
 
-  factory Room.fromJson(Map<String, dynamic>? data) {
-    return Room(
-      id: data?['id'],
-      name: data?['name'],
-      capacity: data?['capacity'],
-      createdAt: DateTime.parse(data?['createdAt']),
-      updatedAt: DateTime.parse(data?['updatedAt']),
-    );
+  Room.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    capacity = json['capacity'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    active = json['active'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['capacity'] = capacity;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['active'] = active;
+    return data;
   }
 }

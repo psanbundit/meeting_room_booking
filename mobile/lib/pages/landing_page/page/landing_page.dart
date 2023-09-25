@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meeting_room_booking/pages/search_room/page/search_room_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:meeting_room_booking/routes.dart';
 
 class MeetingRoomLandingPage extends StatefulWidget {
   const MeetingRoomLandingPage({super.key});
@@ -21,7 +22,7 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: Image.asset(
-                  'assets/meeting_room.png',
+                  'assets/images/background/pawel-chu-ULh0i2txBCY-unsplash-2.png',
                   fit: BoxFit.fitHeight,
                 ),
               ),
@@ -29,7 +30,7 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                 top: 50,
                 left: 20,
                 child: Image.asset(
-                  'assets/palo_logo.png',
+                  'assets/images/logo/PALO-LOGO-Colour-white.png',
                   fit: BoxFit.fitHeight,
                 ),
               )
@@ -100,11 +101,7 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                                 splashFactory: NoSplash.splashFactory,
                                 backgroundColor: const Color(0xFF5CC99B),
                               ),
-                              onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => const SearchRoomPage(),
-                                ),
-                              ),
+                              onPressed: () => context.push(RouteName.dashboardPage.path),
                               child: const Text(
                                 'Login',
                                 style: TextStyle(

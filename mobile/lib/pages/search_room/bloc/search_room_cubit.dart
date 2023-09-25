@@ -10,9 +10,9 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
 
   Dio dio = Dio();
 
-  void setPickDate(DateTime pickedDate) {
+  void setSelectedDate(DateTime selectedDate) {
     emit(state.copyWith(
-      pickedDate: pickedDate,
+      selectedDate: selectedDate,
     ));
   }
 
@@ -28,19 +28,54 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
     ));
   }
 
+  void setRoomList(List<Room> list) {
+    emit(state.copyWith(
+      roomList: list,
+    ));
+  }
+
+  void checkIsSearchValid() {
+    emit(state.copyWith(
+      isSearchValid: isSearchDataValid(),
+    ));
+  }
+
+  void setFormSearch(
+      DateTime? selectedDate, TimeOfDay? startTime, TimeOfDay? endTime) {
+    emit(state.copyWith(
+        selectedDate: selectedDate,
+        startTime: startTime,
+        endTime: endTime,
+        isSearchValid: isSearchDataValid()));
+  }
+
+  double timeToDouble(TimeOfDay time) => time.hour + time.minute / 60.0;
+
+  bool isSearchDataValid() {
+    if (state.startTime == null ||
+        state.endTime == null ||
+        state.selectedDate == null) {
+      return false;
+    }
+    if (timeToDouble(state.startTime!) > timeToDouble(state.endTime!)) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> getAllMeetingRooms() async {
     DateTime _pickedStartTime = DateTime(
-      state.pickedDate!.year,
-      state.pickedDate!.month,
-      state.pickedDate!.day,
+      state.selectedDate!.year,
+      state.selectedDate!.month,
+      state.selectedDate!.day,
       state.startTime!.hour,
       state.startTime!.minute,
     );
 
     DateTime _pickedEndTime = DateTime(
-      state.pickedDate!.year,
-      state.pickedDate!.month,
-      state.pickedDate!.day,
+      state.selectedDate!.year,
+      state.selectedDate!.month,
+      state.selectedDate!.day,
       state.endTime!.hour,
       state.endTime!.minute,
     );
@@ -51,7 +86,8 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
     ));
 
     try {
-      Response response = await dio.get('http://localhost:8080/rooms', queryParameters: {
+      Response response =
+          await dio.get('http://localhost:8080/rooms', queryParameters: {
         "startTime": _pickedStartTime.toIso8601String(),
         "endTime": _pickedEndTime.toIso8601String(),
       });
@@ -79,6 +115,64 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
         status: SearchRoomStatus.fail,
         code: e.response?.statusCode,
         message: e.response?.statusMessage,
+      ));
+    }
+  }
+
+  Future<void> getAllRoom() async {
+    try {
+      if (!isSearchDataValid()) throw Exception("Invalid search data");
+      final start = DateTime(
+              state.selectedDate!.year,
+              state.selectedDate!.month,
+              state.selectedDate!.day,
+              state.startTime!.hour,
+              state.startTime!.minute)
+          .toIso8601String();
+      final end = DateTime(
+              state.selectedDate!.year,
+              state.selectedDate!.month,
+              state.selectedDate!.day,
+              state.endTime!.hour,
+              state.endTime!.minute)
+          .toIso8601String();
+      Response response = await dio.get(
+        'http://localhost:8080/room/available',
+        queryParameters: {
+          'startTime': start,
+          'endTime': end,
+        },
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = response.data;
+        List list = data['data'];
+        List<Room> roomList = [];
+        for (var data in list) {
+          Room room = Room.fromJson(data);
+          roomList.add(room);
+        }
+        emit(state.copyWith(
+          roomList: roomList,
+          status: SearchRoomStatus.sucess,
+        ));
+      }
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print("error > $e");
+      }
+      emit(state.copyWith(
+        status: SearchRoomStatus.fail,
+        code: e.response?.statusCode,
+        message: e.response?.statusMessage,
+      ));
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print("error > $e");
+      }
+      emit(state.copyWith(
+        status: SearchRoomStatus.fail,
+        code: 400,
+        message: e.toString(),
       ));
     }
   }
