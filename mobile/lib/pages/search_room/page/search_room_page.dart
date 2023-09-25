@@ -8,6 +8,7 @@ import 'package:meeting_room_booking/pages/detail_page/page/detail_page.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_cubit.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_state.dart';
 
+
 class SearchRoomPage extends StatefulWidget {
   const SearchRoomPage({super.key});
 
@@ -28,7 +29,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SerachRoomPageCubit, SearchRoomPageState>(
+    return BlocListener<SearchRoomPageCubit, SearchRoomPageState>(
       listener: (context, state) {
         switch (state.status) {
           case SearchRoomStatus.fail:
@@ -51,7 +52,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Date'),
-              BlocBuilder<SerachRoomPageCubit, SearchRoomPageState>(
+              BlocBuilder<SearchRoomPageCubit, SearchRoomPageState>(
                 builder: (context, state) {
                   return InkWell(
                     onTap: () => showDatePicker(
@@ -62,7 +63,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                       currentDate: state.pickedDate,
                     ).then((selectedDate) {
                       if (selectedDate != null) {
-                        context.read<SerachRoomPageCubit>().setPickDate(selectedDate);
+                        context.read<SearchRoomPageCubit>().setPickDate(selectedDate);
                       }
                     }),
                     child: Container(
@@ -96,14 +97,14 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                     child: InkWell(
                       onTap: () => showTimePicker(context: context, initialTime: TimeOfDay.now()).then((selectedStartTime) {
                         if (selectedStartTime != null) {
-                          context.read<SerachRoomPageCubit>().setStartTime(selectedStartTime);
+                          context.read<SearchRoomPageCubit>().setStartTime(selectedStartTime);
                         }
                       }),
                       child: Container(
                         color: const Color(0xFF5CC99B),
                         height: 45,
                         child: Center(
-                          child: BlocSelector<SerachRoomPageCubit, SearchRoomPageState, TimeOfDay?>(
+                          child: BlocSelector<SearchRoomPageCubit, SearchRoomPageState, TimeOfDay?>(
                             selector: (state) => state.startTime,
                             builder: (context, startTime) => Text("${startTime?.format(context)}"),
                           ),
@@ -119,14 +120,14 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                     child: InkWell(
                       onTap: () => showTimePicker(context: context, initialTime: TimeOfDay.now()).then((selectedEndTime) {
                         if (selectedEndTime != null) {
-                          context.read<SerachRoomPageCubit>().setEndTime(selectedEndTime);
+                          context.read<SearchRoomPageCubit>().setEndTime(selectedEndTime);
                         }
                       }),
                       child: Container(
                         color: const Color(0xFF5CC99B),
                         height: 45,
                         child: Center(
-                          child: BlocSelector<SerachRoomPageCubit, SearchRoomPageState, TimeOfDay?>(
+                          child: BlocSelector<SearchRoomPageCubit, SearchRoomPageState, TimeOfDay?>(
                             selector: (state) => state.endTime,
                             builder: (context, endTime) => Text("${endTime?.format(context)}"),
                           ),
@@ -142,12 +143,12 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 45,
-                child: BlocBuilder<SerachRoomPageCubit, SearchRoomPageState>(
+                child: BlocBuilder<SearchRoomPageCubit, SearchRoomPageState>(
                   builder: (context, state) => ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF5CC99B),
                     ),
-                    onPressed: state.startTime != null && state.endTime != null ? () => context.read<SerachRoomPageCubit>().getAllMeetingRooms() : null,
+                    onPressed: state.startTime != null && state.endTime != null ? () => context.read<SearchRoomPageCubit>().getAllMeetingRooms() : null,
                     child: Text('Search'),
                   ),
                 ),
@@ -160,7 +161,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
                 height: 10,
               ),
               Expanded(
-                child: BlocSelector<SerachRoomPageCubit, SearchRoomPageState, List<Room>?>(
+                child: BlocSelector<SearchRoomPageCubit, SearchRoomPageState, List<Room>?>(
                   selector: (state) => state.roomList,
                   builder: (context, roomList) => ListView.separated(
                     separatorBuilder: (context, index) => const SizedBox(

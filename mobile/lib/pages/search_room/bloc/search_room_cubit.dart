@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_room_booking/models/room.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_state.dart';
 
-class SerachRoomPageCubit extends Cubit<SearchRoomPageState> {
-  SerachRoomPageCubit() : super(const SearchRoomPageState());
+class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
+  SearchRoomPageCubit() : super(const SearchRoomPageState());
 
   Dio dio = Dio();
 

@@ -6,7 +6,7 @@ class MainInjector extends BlocInjector {
   @override
   injectBlocs(InjectBloc inject) {
     inject(ApplicationCubit());
-    inject(SerachRoomPageCubit(), lazy: true);
+    inject(SearchRoomPageCubit(), lazy: true);
   }
 }
 
