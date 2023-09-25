@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meeting_room_booking/pages/booking_summary_page/page/booking_summary_page.dart';
 import 'package:meeting_room_booking/pages/dashboard_page/page/dashboard_page.dart';
 import 'package:meeting_room_booking/pages/landing_page/page/landing_page.dart';
 import 'package:meeting_room_booking/pages/search_room/page/search_room_page.dart';
@@ -85,6 +86,19 @@ class Routes {
             key: state.pageKey,
             child: const SearchRoomPage(),
             arguments: state.extra,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.bookingSummaryPage.name,
+        path: RouteName.bookingSummaryPage.path,
+        pageBuilder: (context, state) {
+          BookingSummaryPageAgruments extra =
+              state.extra as BookingSummaryPageAgruments;
+          return buildPage(
+            key: state.pageKey,
+            child: BookingSummaryPage(args: extra),
+            arguments: extra,
           );
         },
       )

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:meeting_room_booking/common/date_selector.dart';
 import 'package:meeting_room_booking/common/room_list.dart';
 import 'package:meeting_room_booking/models/room.dart';
+import 'package:meeting_room_booking/pages/booking_summary_page/page/booking_summary_page.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_cubit.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_state.dart';
 import 'package:meeting_room_booking/routes.dart';
@@ -168,12 +169,17 @@ class _MeetingRoomBody extends State<MeetingRoomBody> {
             const SizedBox(
               height: 30,
             ),
-            BlocSelector<SearchRoomPageCubit, SearchRoomPageState, List<Room>?>(
-                selector: (state) => state.roomList,
-                builder: (context, roomList) => RoomList(
-                    roomList: roomList ?? [],
+            BlocBuilder<SearchRoomPageCubit, SearchRoomPageState>(
+                builder: (context, state) => RoomList(
+                    roomList: state.roomList ?? [],
                     onTapItem: (room) {
-                      context.push(RouteName.bookingSummaryPage.path);
+                      context.pushNamed(RouteName.bookingSummaryPage.name,
+                          extra: BookingSummaryPageAgruments(
+                            roomId: room.id ?? 0,
+                            selectedDate: state.selectedDate ?? DateTime.now(),
+                            startTime: state.startTime ?? TimeOfDay.now(),
+                            endTime: state.endTime ?? TimeOfDay.now(),
+                          ));
                     })),
           ]),
     );

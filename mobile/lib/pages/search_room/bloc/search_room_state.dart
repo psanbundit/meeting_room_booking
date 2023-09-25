@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:meeting_room_booking/models/response.dart';
 import 'package:meeting_room_booking/models/room.dart';
 
 class SearchRoomPageState extends Equatable {
@@ -9,7 +10,7 @@ class SearchRoomPageState extends Equatable {
   final List<Room>? roomList;
   final String? message;
   final int? code;
-  final SearchRoomStatus? status;
+  final ResponseStatus? status;
   final bool isSearchValid;
 
   const SearchRoomPageState({
@@ -19,7 +20,7 @@ class SearchRoomPageState extends Equatable {
     this.roomList = const [],
     this.message,
     this.code,
-    this.status = SearchRoomStatus.init,
+    this.status = ResponseStatus.init,
     this.isSearchValid = false,
   });
 
@@ -30,7 +31,7 @@ class SearchRoomPageState extends Equatable {
     List<Room>? roomList,
     String? message,
     int? code,
-    SearchRoomStatus? status,
+    ResponseStatus? status,
     bool? isSearchValid,
   }) {
     return SearchRoomPageState(
