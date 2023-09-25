@@ -1,57 +1,60 @@
 package com.paloit.meeting_room_booking.service;
 
-import com.paloit.meeting_room_booking.dbmodel.Room;
+import com.paloit.meeting_room_booking.model.FormRoom;
+import com.paloit.meeting_room_booking.model.Room;
 import com.paloit.meeting_room_booking.repository.RoomRepository;
-import com.paloit.meeting_room_booking.request.RoomRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RoomService {
-
+    @Autowired
     private RoomRepository roomRepository;
 
-    // constructor
-    public RoomService(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
-    }
-//
-    public List<Room> getRooms() {
-        return roomRepository.findAll();
+    public List<Room> getAllRoom() {
+        return this.roomRepository.findAll();
     }
 
-    public Optional<Room> getRoomById(Long id) {
-        return roomRepository.findById(id);
+    public Optional<Room> getById(Long id) {
+        return this.roomRepository.findById(id);
     }
 
-    public Room createRoom(RoomRequest request) {
-        Room newRoom = new Room();
-        newRoom.setName(request.getName());
-        newRoom.setCapacity(request.getCapacity());
-        roomRepository.save(newRoom);
-
-        return newRoom;
+    public Room createRoom(Room room) {
+        return this.roomRepository.save(room);
     }
 
-    public void deleteRoom(Long id) {
-        roomRepository.deleteById(id);
+    public Room updateRoom(Long id , FormRoom formRoom) {
+        if(id <= 0) return null;
+        Optional<Room> room = this.roomRepository.findById(id);
+        if(room.isEmpty()){
+            return null;
+        }
+        room.get().setName(formRoom.getName() == null || formRoom.getName().isBlank() ? room.get().getName() : formRoom.getName());
+        room.get().setCapacity(formRoom.getCapacity() == null ? room.get().getCapacity() : formRoom.getCapacity());
+        room.get().setActive(formRoom.getActive() == null ? room.get().getActive() : formRoom.getActive());
+        this.roomRepository.save(room.get());
+        return room.get();
     }
 
-    public Room updateRoom(Long id, RoomRequest request) {
-        Optional<Room> room = getRoomById(id);
+    public List<Room> getAvailableRoomsInPeriod(
+            LocalDateTime startTime, LocalDateTime endTime) {
+        if(startTime.isAfter(endTime) || startTime.isEqual(endTime)){
+            return new ArrayList<>();
+        }
+        return roomRepository.findAvailableRoomsInPeriod(startTime, endTime);
+    }
 
-
-        room.get().setName(request.getName() != null ?  request.getName() : room.get().getName());
-
-        room.get().setCapacity(request.getCapacity() != null ?  request.getCapacity() : room.get().getCapacity());
-
-        roomRepository.save(room.get());
-
-        System.out.println(room.get());
-
-        return  room.get();
+    public Boolean deleteRoom(Long id) {
+        Optional<Room> room = this.roomRepository.findById(id);
+        if(room.isEmpty()){
+            return false;
+        }
+        this.roomRepository.deleteById(id);
+        return true;
     }
 }

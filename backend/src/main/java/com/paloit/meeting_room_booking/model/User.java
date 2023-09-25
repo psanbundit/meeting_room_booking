@@ -1,11 +1,15 @@
-package com.paloit.meeting_room_booking.dbmodel;
+package com.paloit.meeting_room_booking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "user_account")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -14,9 +18,11 @@ public class User {
     private String lastName;
     @Column(unique=true)
     private String email;
+    @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
     private List<Booking> bookings;
 
     public Long getId() {
