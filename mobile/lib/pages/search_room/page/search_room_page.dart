@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:meeting_room_booking/common/date_selector.dart';
 import 'package:meeting_room_booking/common/room_list.dart';
+import 'package:meeting_room_booking/models/response.dart';
 import 'package:meeting_room_booking/models/room.dart';
 import 'package:meeting_room_booking/pages/booking_summary_page/page/booking_summary_page.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_cubit.dart';
@@ -155,16 +156,44 @@ class _MeetingRoomBody extends State<MeetingRoomBody> {
             ),
             BlocSelector<SearchRoomPageCubit, SearchRoomPageState, bool>(
                 selector: (state) => state.isSearchValid,
-                builder: (context, isSearchValid) => ElevatedButton(
-                      onPressed: isSearchValid ? onClickSearchButton : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isSearchValid
-                            ? const Color(0xff5cc99b)
-                            : Colors.grey,
-                        fixedSize: const Size.fromHeight(50),
+                builder: (context, isSearchValid) =>
+                    BlocListener<SearchRoomPageCubit, SearchRoomPageState>(
+                      listener: (context, state) => {
+                        if (state.status == ResponseStatus.fail)
+                          {
+                            context.read<SearchRoomPageCubit>().resetSearch(),
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible:
+                                  false, // user must tap button!
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: const SingleChildScrollView(
+                                    child: Text(
+                                        "Oops, searching problem has occured. Please try again later."),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Close'),
+                                      onPressed: () => {context.pop(true)},
+                                    ),
+                                  ],
+                                );
+                              },
+                            )
+                          }
+                      },
+                      child: ElevatedButton(
+                        onPressed: isSearchValid ? onClickSearchButton : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isSearchValid
+                              ? const Color(0xff5cc99b)
+                              : Colors.grey,
+                          fixedSize: const Size.fromHeight(50),
+                        ),
+                        child: const Text("Search",
+                            style: TextStyle(color: Colors.white)),
                       ),
-                      child: const Text("Search",
-                          style: TextStyle(color: Colors.white)),
                     )),
             const SizedBox(
               height: 30,

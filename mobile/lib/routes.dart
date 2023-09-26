@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meeting_room_booking/pages/booking_result_page/page/booking_result_page.dart';
 import 'package:meeting_room_booking/pages/booking_summary_page/page/booking_summary_page.dart';
 import 'package:meeting_room_booking/pages/dashboard_page/page/dashboard_page.dart';
 import 'package:meeting_room_booking/pages/landing_page/page/landing_page.dart';
+import 'package:meeting_room_booking/pages/my_booking_page/page/my_booking_page.dart';
 import 'package:meeting_room_booking/pages/search_room/page/search_room_page.dart';
 
 enum RouteName {
@@ -99,6 +101,28 @@ class Routes {
             key: state.pageKey,
             child: BookingSummaryPage(args: extra),
             arguments: extra,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.bookingResultPage.name,
+        path: RouteName.bookingResultPage.path,
+        pageBuilder: (context, state) {
+          return buildPage(
+            key: state.pageKey,
+            child: const BookingResultPage(),
+            arguments: state.extra,
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteName.myBookingsPage.name,
+        path: RouteName.myBookingsPage.path,
+        pageBuilder: (context, state) {
+          return buildPage(
+            key: state.pageKey,
+            child: const MyBookingsPage(),
+            arguments: state.extra,
           );
         },
       )

@@ -50,6 +50,10 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
         isSearchValid: isSearchDataValid()));
   }
 
+  void resetSearch() {
+    emit(state.copyWith(code: 0, status: ResponseStatus.init, message: null));
+  }
+
   double timeToDouble(TimeOfDay time) => time.hour + time.minute / 60.0;
 
   bool isSearchDataValid() {
