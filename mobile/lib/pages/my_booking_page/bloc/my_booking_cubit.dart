@@ -9,8 +9,20 @@ class MyBookingCubit extends Cubit<MyBookingState> {
   final Dio dio = Dio();
 
   void setBookingList(List<Booking> bookingList) {
+    final reservedList = bookingList
+        .where((booking) => booking.status == BookingStatus.reserved.value)
+        .toList();
+    final completedList = bookingList
+        .where((booking) => booking.status == BookingStatus.completed.value)
+        .toList();
+    final cancelledList = bookingList
+        .where((booking) => booking.status == BookingStatus.cancelled.value)
+        .toList();
     emit(state.copyWith(
       bookingList: bookingList,
+      reservedList: reservedList,
+      completedList: completedList,
+      cancelledList: cancelledList,
     ));
   }
 

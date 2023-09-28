@@ -4,6 +4,9 @@ import 'package:meeting_room_booking/models/response.dart';
 
 class MyBookingState extends Equatable {
   final List<Booking> bookingList;
+  final List<Booking> reservedList;
+  final List<Booking> completedList;
+  final List<Booking> cancelledList;
   final String? message;
   final ResponseStatus? status;
   final int? code;
@@ -13,10 +16,16 @@ class MyBookingState extends Equatable {
     this.code,
     this.status = ResponseStatus.init,
     this.bookingList = const [],
+    this.reservedList = const [],
+    this.completedList = const [],
+    this.cancelledList = const [],
   });
 
   MyBookingState copyWith({
     List<Booking>? bookingList,
+    List<Booking>? reservedList,
+    List<Booking>? completedList,
+    List<Booking>? cancelledList,
     String? message,
     int? code,
     ResponseStatus? status,
@@ -25,12 +34,18 @@ class MyBookingState extends Equatable {
         message: message ?? this.message,
         code: code ?? this.code,
         status: status ?? this.status,
-        bookingList: bookingList ?? this.bookingList);
+        bookingList: bookingList ?? this.bookingList,
+        reservedList: reservedList ?? this.reservedList,
+        completedList: completedList ?? this.completedList,
+        cancelledList: cancelledList ?? this.cancelledList);
   }
 
   @override
   List<Object?> get props => [
         bookingList,
+        reservedList,
+        completedList,
+        cancelledList,
         message,
         code,
         status,

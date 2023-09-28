@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:meeting_room_booking/common/date_selector.dart';
 import 'package:meeting_room_booking/common/room_list_item.dart';
 import 'package:meeting_room_booking/common/transition/slide_from_bottom.dart';
+import 'package:meeting_room_booking/models/response.dart';
+import 'package:meeting_room_booking/pages/booking_result_page/page/booking_result_page.dart';
 import 'package:meeting_room_booking/pages/booking_summary_page/bloc/booking_summary_cubit.dart';
 import 'package:meeting_room_booking/pages/booking_summary_page/bloc/booking_summary_state.dart';
 import 'package:meeting_room_booking/routes.dart';
@@ -40,6 +42,7 @@ class _BookingSummaryPageState extends State<BookingSummaryPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BookingSummaryCubit>().resetState();
       if (widget.args == null) return;
       final args = widget.args!;
       context
@@ -106,7 +109,12 @@ class BookingSummaryContent extends StatefulWidget {
 
 class _BookingSummaryContentState extends State<BookingSummaryContent> {
   void onPressedConfirm() {
-    context.push(RouteName.bookingResultPage.path);
+    context.read<BookingSummaryCubit>().postBookingRoomById();
+    // try {
+    //   context.push(RouteName.bookingResultPage.path);
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   @override
@@ -220,15 +228,49 @@ class _BookingSummaryContentState extends State<BookingSummaryContent> {
                               child: const Text("Cancel")),
                           const SizedBox(height: 10),
                           ElevatedButton(
-                              onPressed: onPressedConfirm,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff5cc99b),
-                                fixedSize: const Size.fromHeight(75),
-                              ),
-                              child: const Text("Confirm Booking",
-                                  style: TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 136, 65, 65)))),
+                            onPressed: onPressedConfirm,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff5cc99b),
+                              fixedSize: const Size.fromHeight(75),
+                            ),
+                            child: BlocListener<BookingSummaryCubit,
+                                    BookingSummaryState>(
+                                listener: (context, state) {
+                                  if (state.isBookingLoading &&
+                                      state.status != ResponseStatus.init) {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible:
+                                          false, // Prevent dismissing the dialog by tapping outside
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: const [
+                                                CircularProgressIndicator(),
+                                                SizedBox(width: 20),
+                                                Text("Loading..."),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else if (!state.isBookingLoading &&
+                                      state.status != ResponseStatus.init) {
+                                    context.pop();
+                                    context.pushNamed(
+                                        RouteName.bookingResultPage.name,
+                                        extra: BookingResultPageAgruments(
+                                          bookingId: state.bookingId ?? 0,
+                                        ));
+                                  }
+                                },
+                                child: const Text("Confirm Booking",
+                                    style: TextStyle(color: Colors.white))),
+                          ),
                         ],
                       )
                     ],

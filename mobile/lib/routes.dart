@@ -108,9 +108,11 @@ class Routes {
         name: RouteName.bookingResultPage.name,
         path: RouteName.bookingResultPage.path,
         pageBuilder: (context, state) {
+          BookingResultPageAgruments extra =
+              state.extra as BookingResultPageAgruments;
           return buildPage(
             key: state.pageKey,
-            child: const BookingResultPage(),
+            child: BookingResultPage(args: extra),
             arguments: state.extra,
           );
         },

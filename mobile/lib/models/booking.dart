@@ -34,18 +34,28 @@ class Booking {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['start'] = this.start;
-    data['end'] = this.end;
-    data['createdAt'] = this.createdAt;
-    data['nbPeople'] = this.nbPeople;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    data['id'] = id;
+    data['start'] = start;
+    data['end'] = end;
+    data['createdAt'] = createdAt;
+    data['nbPeople'] = nbPeople;
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
-    if (this.room != null) {
-      data['room'] = this.room!.toJson();
+    if (room != null) {
+      data['room'] = room!.toJson();
     }
-    data['status'] = this.status;
+    data['status'] = status;
     return data;
   }
+}
+
+enum BookingStatus {
+  reserved('RESERVED'),
+  completed('COMPLETED'),
+  cancelled('CANCELLED');
+
+  final String value;
+
+  const BookingStatus(this.value);
 }
