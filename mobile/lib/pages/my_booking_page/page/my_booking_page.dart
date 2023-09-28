@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_room_booking/common/booking_app_bar.dart';
 import 'package:meeting_room_booking/common/booking_card.dart';
+import 'package:meeting_room_booking/common/transition/slide_from_bottom.dart';
 import 'package:meeting_room_booking/models/booking.dart';
 import 'package:meeting_room_booking/pages/my_booking_page/bloc/my_booking_cubit.dart';
 import 'package:meeting_room_booking/pages/my_booking_page/bloc/my_booking_state.dart';
@@ -54,72 +55,106 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-          child: BlocBuilder<MyBookingCubit, MyBookingState>(
-              builder: (context, state) => Padding(
-                    padding: const EdgeInsets.fromLTRB(22, 30, 22, 30),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Flex(
-                            direction: Axis.vertical,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text("Reserved",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                              const SizedBox(height: 10),
-                              Container(
-                                  constraints:
-                                      const BoxConstraints(minHeight: 100),
-                                  child: BookingCardList(
-                                      bookingList: state.reservedList,
-                                      variant: BookingStatus.reserved)),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Flex(
-                            direction: Axis.vertical,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text("Cancelled",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                              const SizedBox(height: 10),
-                              Container(
-                                  constraints:
-                                      const BoxConstraints(minHeight: 100),
-                                  child: BookingCardList(
-                                      bookingList: state.cancelledList,
-                                      variant: BookingStatus.cancelled)),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Flex(
-                            direction: Axis.vertical,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text("Completed",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                              const SizedBox(height: 10),
-                              Container(
-                                  constraints:
-                                      const BoxConstraints(minHeight: 100),
-                                  child: BookingCardList(
-                                      bookingList: state.completedList,
-                                      variant: BookingStatus.completed)),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                        ]),
+      body: Stack(children: [
+        SingleChildScrollView(
+            child: BlocBuilder<MyBookingCubit, MyBookingState>(
+                builder: (context, state) => Padding(
+                      padding: const EdgeInsets.fromLTRB(22, 30, 22, 30),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Flex(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Text("Reserved",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                                const SizedBox(height: 10),
+                                Container(
+                                    constraints:
+                                        const BoxConstraints(minHeight: 100),
+                                    child: BookingCardList(
+                                        bookingList: state.reservedList,
+                                        variant: BookingStatus.reserved)),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            Flex(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Text("Cancelled",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                                const SizedBox(height: 10),
+                                Container(
+                                    constraints:
+                                        const BoxConstraints(minHeight: 100),
+                                    child: BookingCardList(
+                                        bookingList: state.cancelledList,
+                                        variant: BookingStatus.cancelled)),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            Flex(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Text("Completed",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                                const SizedBox(height: 10),
+                                Container(
+                                    constraints:
+                                        const BoxConstraints(minHeight: 100),
+                                    child: BookingCardList(
+                                        bookingList: state.completedList,
+                                        variant: BookingStatus.completed)),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                          ]),
+                    ))),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SlideFromBottomTransition(
+              child: Container(
+                  width: double.infinity,
+                  height: 155,
+                  padding: const EdgeInsets.fromLTRB(22, 50, 22, 40),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(72, 39, 39, 39),
+                        spreadRadius: 0,
+                        blurRadius: 10.0,
+                        offset: Offset(10, 10),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xff5cc99b))),
+                    child: const Text(
+                      "Make New Booking",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ))),
+        ),
+      ]),
     );
   }
 }
