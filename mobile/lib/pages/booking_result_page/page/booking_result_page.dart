@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meeting_room_booking/routes.dart';
 
 class BookingResultPageAgruments {
   final int bookingId;
@@ -50,9 +51,12 @@ class BookingResultBody extends StatelessWidget {
                   Align(
                     alignment: Alignment.topLeft,
                     child: InkWell(
-                        onTap: () => {
-                              context.pop(),
-                            },
+                        onTap: () {
+                          // TODO: this is weird should improve
+                          context.go(RouteName.landingPage.path);
+                          context.push(RouteName.dashboardPage.path);
+                          context.push(RouteName.searchRoomPage.path);
+                        },
                         child: const Icon(
                           Icons.arrow_back,
                           color: Colors.white,
@@ -70,7 +74,7 @@ class BookingResultBody extends StatelessWidget {
                             color: Colors.white,
                           )),
                       const SizedBox(height: 28),
-                      Text("Your Booking No. is ${id}",
+                      Text("Your Booking No. is $id",
                           softWrap: true,
                           textAlign: TextAlign.center,
                           style: const TextStyle(

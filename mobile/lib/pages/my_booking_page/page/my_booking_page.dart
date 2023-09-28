@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:meeting_room_booking/common/booking_app_bar.dart';
 import 'package:meeting_room_booking/common/booking_card.dart';
 import 'package:meeting_room_booking/common/transition/slide_from_bottom.dart';
 import 'package:meeting_room_booking/models/booking.dart';
 import 'package:meeting_room_booking/pages/my_booking_page/bloc/my_booking_cubit.dart';
 import 'package:meeting_room_booking/pages/my_booking_page/bloc/my_booking_state.dart';
+import 'package:meeting_room_booking/routes.dart';
 
 class MyBookingsPage extends StatefulWidget {
   const MyBookingsPage({super.key});
@@ -144,7 +146,12 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                     ],
                   ),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // TODO: this is weird should improve
+                      context.go(RouteName.landingPage.path);
+                      context.push(RouteName.dashboardPage.path);
+                      context.push(RouteName.searchRoomPage.path);
+                    },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xff5cc99b))),
