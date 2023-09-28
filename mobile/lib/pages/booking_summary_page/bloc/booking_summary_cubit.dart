@@ -53,7 +53,7 @@ class BookingSummaryCubit extends Cubit<BookingSummaryState> {
     ));
   }
 
-  void resetState(){
+  void resetState() {
     emit(const BookingSummaryState());
   }
 
@@ -115,7 +115,7 @@ class BookingSummaryCubit extends Cubit<BookingSummaryState> {
       );
       if (response.statusCode == 201) {
         emit(state.copyWith(
-          status: ResponseStatus.sucess,
+          status: ResponseStatus.success,
           bookingId: response.data['data']['id'],
         ));
       }

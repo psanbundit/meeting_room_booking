@@ -23,7 +23,7 @@ class _BookingResultPageState extends State<BookingResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BookingResultBody(id: widget.args.bookingId ?? 0),
+      body: BookingResultBody(id: widget.args.bookingId),
     );
   }
 }

@@ -106,7 +106,7 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
         }
         emit(state.copyWith(
           roomList: roomList,
-          status: ResponseStatus.sucess,
+          status: ResponseStatus.success,
         ));
       }
     } on DioException catch (e) {

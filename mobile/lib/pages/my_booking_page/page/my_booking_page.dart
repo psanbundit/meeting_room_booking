@@ -5,6 +5,7 @@ import 'package:meeting_room_booking/common/booking_app_bar.dart';
 import 'package:meeting_room_booking/common/booking_card.dart';
 import 'package:meeting_room_booking/common/transition/slide_from_bottom.dart';
 import 'package:meeting_room_booking/models/booking.dart';
+import 'package:meeting_room_booking/models/response.dart';
 import 'package:meeting_room_booking/pages/my_booking_page/bloc/my_booking_cubit.dart';
 import 'package:meeting_room_booking/pages/my_booking_page/bloc/my_booking_state.dart';
 import 'package:meeting_room_booking/routes.dart';
@@ -21,6 +22,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MyBookingCubit>().resetState();
       context.read<MyBookingCubit>().getMyBookings();
     });
   }
@@ -80,7 +82,18 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                                         const BoxConstraints(minHeight: 100),
                                     child: BookingCardList(
                                         bookingList: state.reservedList,
-                                        variant: BookingStatus.reserved)),
+                                        variant: BookingStatus.reserved,
+                                        onPressedCancel: (Booking booking) {
+                                          if (booking.id == null) {
+                                            context
+                                                .read<MyBookingCubit>()
+                                                .setStatus(ResponseStatus.fail);
+                                            return;
+                                          }
+                                          context
+                                              .read<MyBookingCubit>()
+                                              .patchCancelBooking(booking.id!);
+                                        })),
                               ],
                             ),
                             const SizedBox(height: 20),
@@ -122,6 +135,44 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                               ],
                             ),
                             const SizedBox(height: 155),
+                            BlocListener<MyBookingCubit, MyBookingState>(
+                                listenWhen: (previous, current) =>
+                                    previous.isLoading != current.isLoading,
+                                listener: (context, state) => {
+                                      if (state.isLoading &&
+                                          state.status == ResponseStatus.init)
+                                        {
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      20.0),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: const [
+                                                      CircularProgressIndicator(),
+                                                      SizedBox(width: 20),
+                                                      Text("Loading..."),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        }
+                                      else if (!state.isLoading)
+                                        {
+                                          Future.delayed(
+                                              const Duration(seconds: 2), () {
+                                            context.pop();
+                                          })
+                                        }
+                                    },
+                                child: Container())
                           ]),
                     ))),
         Align(
@@ -171,22 +222,39 @@ class BookingCardList extends StatelessWidget {
       {super.key,
       this.bookingList = const [],
       this.onTapListItem,
-      required this.variant});
+      required this.variant,
+      this.onPressedCancel});
 
   final Function()? onTapListItem;
+  final Function(Booking booking)? onPressedCancel;
   final List<Booking> bookingList;
   final BookingStatus variant;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: bookingList
-            .map((booking) => Column(
-                  children: [
-                    BookingCard(booking: booking, variant: variant),
-                    const SizedBox(height: 10)
-                  ],
-                ))
-            .toList());
+    return bookingList.isNotEmpty
+        ? Column(
+            children: bookingList
+                .map((booking) => Column(
+                      children: [
+                        BookingCard(
+                          booking: booking,
+                          variant: variant,
+                          onPressedCancel: onPressedCancel,
+                        ),
+                        const SizedBox(height: 10)
+                      ],
+                    ))
+                .toList())
+        : SizedBox(
+            height: 100,
+            child: Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Text("No booking in the list", textAlign: TextAlign.center)
+              ],
+            ));
   }
 }
