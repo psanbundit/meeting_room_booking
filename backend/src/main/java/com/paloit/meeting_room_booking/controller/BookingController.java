@@ -45,7 +45,6 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
         Booking booking = this.bookingService.createBooking(userId, roomId, formBooking);
-        System.out.println("booking: " + booking);
         if(booking == null){
             response.setError("Create booking error");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -75,7 +74,7 @@ public class BookingController {
     @GetMapping("/my")
     public ResponseEntity<BaseResponse<List<Booking>>> getMyBooking(@RequestParam("status") BookingStatus status) {
 //        TODO: Mocking user id
-        Long userId = (long) 2;
+        Long userId = (long) 1;
         List<Booking> list = this.bookingService.getAllBookingByUserIdAndStatus(userId, status);
         BaseResponse<List<Booking>> response = new BaseResponse<>();
         if (userId <= 0) {

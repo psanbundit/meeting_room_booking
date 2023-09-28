@@ -50,10 +50,14 @@ public class BookingService {
         if (user == null || room == null) {
             return null;
         }
+        if (formBooking.getNbPeople() > room.getCapacity()) {
+            return null;
+        }
         booking.setUser(user);
         booking.setRoom(room);
         booking.setStart(formBooking.getStart());
         booking.setEnd(formBooking.getEnd());
+        booking.setNbPeople(formBooking.getNbPeople());
         booking.setStatus(BookingStatus.RESERVED.toString());
         return this.bookingRepository.save(booking);
     }
