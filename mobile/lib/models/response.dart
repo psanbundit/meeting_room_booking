@@ -5,6 +5,6 @@ class GeneralResponse<T> {
 
 enum ResponseStatus {
   init,
-  sucess,
+  success,
   fail,
 }

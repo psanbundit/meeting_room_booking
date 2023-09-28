@@ -27,6 +27,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SearchRoomPageCubit>().resetState();
       DateTime dayNow = DateTime.now();
       TimeOfDay timeNow = TimeOfDay.now();
       context.read<SearchRoomPageCubit>().setSelectedDate(dayNow);

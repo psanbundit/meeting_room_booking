@@ -10,6 +10,7 @@ class MyBookingState extends Equatable {
   final String? message;
   final ResponseStatus? status;
   final int? code;
+  final bool isLoading;
 
   const MyBookingState({
     this.message,
@@ -19,6 +20,7 @@ class MyBookingState extends Equatable {
     this.reservedList = const [],
     this.completedList = const [],
     this.cancelledList = const [],
+    this.isLoading = false,
   });
 
   MyBookingState copyWith({
@@ -29,15 +31,18 @@ class MyBookingState extends Equatable {
     String? message,
     int? code,
     ResponseStatus? status,
+    bool? isLoading,
   }) {
     return MyBookingState(
-        message: message ?? this.message,
-        code: code ?? this.code,
-        status: status ?? this.status,
-        bookingList: bookingList ?? this.bookingList,
-        reservedList: reservedList ?? this.reservedList,
-        completedList: completedList ?? this.completedList,
-        cancelledList: cancelledList ?? this.cancelledList);
+      message: message ?? this.message,
+      code: code ?? this.code,
+      status: status ?? this.status,
+      bookingList: bookingList ?? this.bookingList,
+      reservedList: reservedList ?? this.reservedList,
+      completedList: completedList ?? this.completedList,
+      cancelledList: cancelledList ?? this.cancelledList,
+      isLoading: isLoading ?? this.isLoading,
+    );
   }
 
   @override
@@ -49,5 +54,6 @@ class MyBookingState extends Equatable {
         message,
         code,
         status,
+        isLoading,
       ];
 }

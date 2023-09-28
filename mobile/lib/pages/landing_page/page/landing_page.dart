@@ -21,9 +21,13 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: Image.asset(
-                  'assets/images/background/pawel-chu-ULh0i2txBCY-unsplash-2.png',
-                  fit: BoxFit.fitHeight,
+                child: ColorFiltered(
+                  colorFilter: const ColorFilter.mode(
+                      Color.fromARGB(79, 0, 0, 0), BlendMode.srcOver),
+                  child: Image.asset(
+                    'assets/images/background/pawel-chu-ULh0i2txBCY-unsplash-2.png',
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
               ),
               Positioned(
@@ -31,7 +35,7 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                 left: 20,
                 child: Image.asset(
                   'assets/images/logo/PALO-LOGO-Colour-white.png',
-                  fit: BoxFit.fitHeight,
+                  width: 125,
                 ),
               )
             ],
@@ -101,7 +105,8 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                                 splashFactory: NoSplash.splashFactory,
                                 backgroundColor: const Color(0xFF5CC99B),
                               ),
-                              onPressed: () => context.push(RouteName.dashboardPage.path),
+                              onPressed: () =>
+                                  context.push(RouteName.dashboardPage.path),
                               child: const Text(
                                 'Login',
                                 style: TextStyle(

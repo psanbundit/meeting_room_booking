@@ -3,10 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:meeting_room_booking/models/booking.dart';
 
 class BookingCard extends StatelessWidget {
-  const BookingCard({super.key, required this.booking, required this.variant});
+  BookingCard(
+      {super.key,
+      required this.booking,
+      required this.variant,
+      this.onPressedCancel});
 
   final Booking booking;
   final BookingStatus variant;
+  final Function(Booking booking)? onPressedCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +42,17 @@ class BookingCard extends StatelessWidget {
                   Text(DateFormat('dd/MM/yyyy')
                       .format(DateTime.parse(booking.start ?? ''))),
                   Text(
-                      "${DateFormat('hh:mm aaa').format(DateTime.parse(booking.start ?? ''))} - ${DateFormat('hh:mm aaa').format(DateTime.parse(booking.end ?? ''))}"),
+                      "${DateFormat('Hm').format(DateTime.parse(booking.start ?? ''))} - ${DateFormat('Hm').format(DateTime.parse(booking.end ?? ''))}"),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(
+                  height:
+                      booking.status == BookingStatus.reserved.value ? 24 : 0),
               booking.status == BookingStatus.reserved.value
                   ? ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (onPressedCancel != null) onPressedCancel!(booking);
+                      },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all<Color>(Colors.red)),
