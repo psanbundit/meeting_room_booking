@@ -81,6 +81,18 @@ public class BookingService {
         return booking.get();
     }
 
+    public Boolean updateBookingStatus(Long id, BookingStatus status){
+        if (id <= 0)
+            return false;
+        Optional<Booking> booking = this.bookingRepository.findById(id);
+        if (booking.isEmpty()) {
+            return false;
+        }
+        booking.get().setStatus(status.toString());
+        this.bookingRepository.save(booking.get());
+        return true;
+    }
+
     public Boolean deleteBooking(Long id) {
         Optional<Booking> booking = this.bookingRepository.findById(id);
         if (booking.isEmpty()) {

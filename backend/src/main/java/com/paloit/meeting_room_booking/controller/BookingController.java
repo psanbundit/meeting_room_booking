@@ -71,6 +71,18 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<BaseResponse<Boolean>> patchCancelBooking(@PathVariable Long id){
+        BaseResponse<Boolean> response = new BaseResponse<>();
+        if(id <= 0){
+            response.setError("Booking Id should be Long and greater than 0");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        Boolean isSuccess = this.bookingService.updateBookingStatus(id, BookingStatus.CANCELLED);
+        response.setData(isSuccess);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping("/my")
     public ResponseEntity<BaseResponse<List<Booking>>> getMyBooking(@RequestParam("status") BookingStatus status) {
 //        TODO: Mocking user id
