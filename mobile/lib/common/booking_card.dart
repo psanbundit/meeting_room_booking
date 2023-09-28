@@ -40,7 +40,9 @@ class BookingCard extends StatelessWidget {
                       "${DateFormat('hh:mm aaa').format(DateTime.parse(booking.start ?? ''))} - ${DateFormat('hh:mm aaa').format(DateTime.parse(booking.end ?? ''))}"),
                 ],
               ),
-              const SizedBox(height: 24),
+              SizedBox(
+                  height:
+                      booking.status == BookingStatus.reserved.value ? 24 : 0),
               booking.status == BookingStatus.reserved.value
                   ? ElevatedButton(
                       onPressed: () {},

@@ -119,7 +119,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                                         variant: BookingStatus.completed)),
                               ],
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 155),
                           ]),
                     ))),
         Align(
