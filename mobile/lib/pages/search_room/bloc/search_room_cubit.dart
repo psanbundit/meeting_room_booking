@@ -41,6 +41,10 @@ class SearchRoomPageCubit extends Cubit<SearchRoomPageState> {
     ));
   }
 
+  void resetState() {
+    emit(const SearchRoomPageState());
+  }
+
   void setFormSearch(
       DateTime? selectedDate, TimeOfDay? startTime, TimeOfDay? endTime) {
     emit(state.copyWith(
