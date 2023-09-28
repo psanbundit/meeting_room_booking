@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:meeting_room_booking/models/booking.dart';
 
 class BookingCard extends StatelessWidget {
-  const BookingCard({super.key});
+  const BookingCard({super.key, required this.booking, required this.variant});
+
+  final Booking booking;
+  final BookingStatus variant;
 
   @override
   Widget build(BuildContext context) {
@@ -14,35 +19,40 @@ class BookingCard extends StatelessWidget {
             direction: Axis.vertical,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("Booking No. ${1}"),
-              SizedBox(height: 24),
+              Text("Booking No. ${booking.id}"),
+              const SizedBox(height: 24),
               Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Room ${'A0001'}"),
-                  Text("${25} Guests max"),
+                  Text("Room ${booking.room?.name ?? '-'}"),
+                  Text("${booking.room?.capacity ?? 0} Guests max"),
                 ],
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Room ${'A0001'}"),
-                  Text("${25} Guests max"),
+                  Text(DateFormat('dd/MM/yyyy')
+                      .format(DateTime.parse(booking.start ?? ''))),
+                  Text(
+                      "${DateFormat('hh:mm aaa').format(DateTime.parse(booking.start ?? ''))} - ${DateFormat('hh:mm aaa').format(DateTime.parse(booking.end ?? ''))}"),
                 ],
               ),
-              SizedBox(height: 24),
-              ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    "${'Cancel'}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.red)))
+              const SizedBox(height: 24),
+              booking.status == BookingStatus.reserved.value
+                  ? ElevatedButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red)),
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  : Container(),
             ]));
   }
 }

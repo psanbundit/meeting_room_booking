@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:meeting_room_booking/common/date_selector.dart';
 import 'package:meeting_room_booking/common/room_list.dart';
 import 'package:meeting_room_booking/models/response.dart';
-import 'package:meeting_room_booking/models/room.dart';
 import 'package:meeting_room_booking/pages/booking_summary_page/page/booking_summary_page.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_cubit.dart';
 import 'package:meeting_room_booking/pages/search_room/bloc/search_room_state.dart';

@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+class BookingResultPageAgruments {
+  final int bookingId;
+
+  const BookingResultPageAgruments({
+    required this.bookingId,
+  });
+}
+
 class BookingResultPage extends StatefulWidget {
-  const BookingResultPage({super.key});
+  const BookingResultPage({super.key, required this.args});
+
+  final BookingResultPageAgruments args;
 
   @override
   State<BookingResultPage> createState() => _BookingResultPageState();
@@ -11,15 +21,15 @@ class BookingResultPage extends StatefulWidget {
 class _BookingResultPageState extends State<BookingResultPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: BookingResultBody(),
+    return Scaffold(
+      body: BookingResultBody(id: widget.args.bookingId ?? 0),
     );
   }
 }
 
 class BookingResultBody extends StatelessWidget {
-  const BookingResultBody({super.key});
-
+  const BookingResultBody({super.key, required this.id});
+  final int id;
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -51,19 +61,19 @@ class BookingResultBody extends StatelessWidget {
                   const Spacer(),
                   Align(
                     alignment: Alignment.center,
-                    child: Flex(direction: Axis.vertical, children: const [
-                      Text("Booking\nSuccessful",
+                    child: Flex(direction: Axis.vertical, children: [
+                      const Text("Booking\nSuccessful",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           )),
-                      SizedBox(height: 28),
-                      Text("Your Booking No. is ${1}",
+                      const SizedBox(height: 28),
+                      Text("Your Booking No. is ${id}",
                           softWrap: true,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,

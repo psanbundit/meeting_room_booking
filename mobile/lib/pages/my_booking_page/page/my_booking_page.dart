@@ -55,9 +55,8 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
         ),
       ),
       body: SingleChildScrollView(
-          child: BlocSelector<MyBookingCubit, MyBookingState, List<Booking>?>(
-              selector: (state) => state.bookingList,
-              builder: (context, list) => Padding(
+          child: BlocBuilder<MyBookingCubit, MyBookingState>(
+              builder: (context, state) => Padding(
                     padding: const EdgeInsets.fromLTRB(22, 30, 22, 30),
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,8 +74,9 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                               Container(
                                   constraints:
                                       const BoxConstraints(minHeight: 100),
-                                  child:
-                                      BookingCardList(bookingList: list ?? [])),
+                                  child: BookingCardList(
+                                      bookingList: state.reservedList,
+                                      variant: BookingStatus.reserved)),
                             ],
                           ),
                           const SizedBox(height: 20),
@@ -93,8 +93,9 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                               Container(
                                   constraints:
                                       const BoxConstraints(minHeight: 100),
-                                  child:
-                                      BookingCardList(bookingList: list ?? [])),
+                                  child: BookingCardList(
+                                      bookingList: state.cancelledList,
+                                      variant: BookingStatus.cancelled)),
                             ],
                           ),
                           const SizedBox(height: 20),
@@ -111,8 +112,9 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
                               Container(
                                   constraints:
                                       const BoxConstraints(minHeight: 100),
-                                  child:
-                                      BookingCardList(bookingList: list ?? [])),
+                                  child: BookingCardList(
+                                      bookingList: state.completedList,
+                                      variant: BookingStatus.completed)),
                             ],
                           ),
                           const SizedBox(height: 20),
@@ -123,17 +125,25 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
 }
 
 class BookingCardList extends StatelessWidget {
-  BookingCardList({super.key, required this.bookingList, this.onTapListItem});
+  const BookingCardList(
+      {super.key,
+      this.bookingList = const [],
+      this.onTapListItem,
+      required this.variant});
 
   final Function()? onTapListItem;
-  List<Booking> bookingList = [];
+  final List<Booking> bookingList;
+  final BookingStatus variant;
 
   @override
   Widget build(BuildContext context) {
     return Column(
         children: bookingList
-            .map((e) => Column(
-                  children: const [BookingCard(), SizedBox(height: 10)],
+            .map((booking) => Column(
+                  children: [
+                    BookingCard(booking: booking, variant: variant),
+                    const SizedBox(height: 10)
+                  ],
                 ))
             .toList());
   }
