@@ -58,8 +58,13 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
+  flutter_driver:
+    sdk: flutter
   flutter_lints: ^2.0.3
   dart_code_metrics_presets: ^2.3.0
+  flutter_gherkin: ^2.0.0
+  glob:
+  path:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
