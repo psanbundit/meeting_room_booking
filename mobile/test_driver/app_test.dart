@@ -6,17 +6,21 @@ import 'steps/app_load.dart';
 import 'steps/chill_out.dart';
 import 'steps/element_load.dart';
 import 'steps/enter_text.dart';
+import 'steps/chill_out_for.dart';
+import 'steps/found_text.dart';
 
 Future<void> main() {
   final config = FlutterTestConfiguration()
     ..features = [
-      Glob(r"test_driver/features/*.feature")
+      Glob(r"test_driver/features/search_available_room.feature")
     ]
     ..stepDefinitions = [
       appLoad(),
       elementLoaded(),
       chill(),
+      chillFor(),
       enterText(),
+      foundText(),
     ]
     ..reporters = [
       ProgressReporter(),

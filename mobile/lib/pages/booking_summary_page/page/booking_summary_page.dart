@@ -55,6 +55,7 @@ class _BookingSummaryPageState extends State<BookingSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      key: Key("booking_summary_page"),
       body: BookingSummaryBody(),
     );
   }
@@ -228,6 +229,7 @@ class _BookingSummaryContentState extends State<BookingSummaryContent> {
                               child: const Text("Cancel")),
                           const SizedBox(height: 10),
                           ElevatedButton(
+                            key: const Key("confirm_booking_room_button"),
                             onPressed: onPressedConfirm,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xff5cc99b),

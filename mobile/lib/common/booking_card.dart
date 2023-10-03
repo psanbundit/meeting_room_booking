@@ -30,8 +30,13 @@ class BookingCard extends StatelessWidget {
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Room ${booking.room?.name ?? '-'}"),
-                  Text("${booking.room?.capacity ?? 0} Guests max"),
+                  Expanded(
+                    child: Text("Room ${booking.room?.name ?? '-'}"),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Text("${booking.room?.capacity ?? 0} Guests max"),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -39,10 +44,15 @@ class BookingCard extends StatelessWidget {
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(DateFormat('dd/MM/yyyy')
-                      .format(DateTime.parse(booking.start ?? ''))),
-                  Text(
-                      "${DateFormat('Hm').format(DateTime.parse(booking.start ?? ''))} - ${DateFormat('Hm').format(DateTime.parse(booking.end ?? ''))}"),
+                  Expanded(
+                    child: Text(DateFormat('dd/MM/yyyy')
+                        .format(DateTime.parse(booking.start ?? ''))),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Text(
+                        "${DateFormat('Hm').format(DateTime.parse(booking.start ?? ''))} - ${DateFormat('Hm').format(DateTime.parse(booking.end ?? ''))}"),
+                  ),
                 ],
               ),
               SizedBox(

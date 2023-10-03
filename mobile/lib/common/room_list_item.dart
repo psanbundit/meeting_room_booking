@@ -15,6 +15,7 @@ class RoomListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      key: Key("room_list_item_${room.id}"),
         onTap: () => onTapCard(context),
         child: Container(
             decoration: BoxDecoration(

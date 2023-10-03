@@ -41,6 +41,7 @@ class _SearchRoomPageState extends State<SearchRoomPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      key: Key("search_room_page"),
       appBar: MeetingRoomAppBar(),
       body: MeetingRoomBody(),
     );
@@ -184,6 +185,7 @@ class _MeetingRoomBody extends State<MeetingRoomBody> {
                           }
                       },
                       child: ElevatedButton(
+                        key: const Key("search_available_room_button"),
                         onPressed: isSearchValid ? onClickSearchButton : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isSearchValid

@@ -138,11 +138,9 @@ class BookingSummaryCubit extends Cubit<BookingSummaryState> {
         message: e.toString(),
       ));
     } finally {
-      Future.delayed(const Duration(seconds: 3), () {
-        emit(state.copyWith(
-          isBookingLoading: false,
-        ));
-      });
+      emit(state.copyWith(
+        isBookingLoading: false,
+      ));
     }
   }
 }

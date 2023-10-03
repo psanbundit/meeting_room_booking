@@ -101,6 +101,7 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                           child: SizedBox(
                             height: 75,
                             child: ElevatedButton(
+                              key: const Key("login_button"),
                               style: ElevatedButton.styleFrom(
                                 splashFactory: NoSplash.splashFactory,
                                 backgroundColor: const Color(0xFF5CC99B),
@@ -127,6 +128,7 @@ class _MeetingRoomLandingPageState extends State<MeetingRoomLandingPage> {
                           child: SizedBox(
                             height: 75,
                             child: OutlinedButton(
+                              key: const Key("signup_button"),
                               style: OutlinedButton.styleFrom(
                                 splashFactory: NoSplash.splashFactory,
                                 side: const BorderSide(

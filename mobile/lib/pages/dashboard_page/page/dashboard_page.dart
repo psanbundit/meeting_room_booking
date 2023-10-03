@@ -13,6 +13,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const Key("dashboard_page"),
       appBar: const DashboardAppBar(),
       body: Padding(
           padding: const EdgeInsets.all(0),
@@ -24,6 +25,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
             crossAxisCount: 2,
             children: <Widget>[
               InkWell(
+                  key: const Key("select_meeting_room_button"),
                   onTap: () {
                     context.push(RouteName.searchRoomPage.path);
                   },
@@ -47,6 +49,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                         ]),
                   )),
               InkWell(
+                  key: const Key("my_bookings_button"),
                   onTap: () {
                     context.push(RouteName.myBookingsPage.path);
                   },
