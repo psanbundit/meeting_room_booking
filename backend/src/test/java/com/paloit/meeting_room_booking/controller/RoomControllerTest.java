@@ -53,35 +53,6 @@ public class RoomControllerTest {
                 .assertThat().body("errors", Matchers.is("Room not found"));
     }
 
-    // @Test
-    // public void createRoom_responseSuccess_201() {
-    //
-    // Map<String,Object> room = new HashMap<>();
-    // room.put("name", "xyx1111");
-    // room.put("capacity", 10);
-    //
-    // given()
-    // .log()
-    // .all()
-    // .header("Content-Type", "application/json")
-    // .body(room)
-    // .when().post("/room/create")
-    // .then()
-    // .statusCode(201);
-    // }
-    //
-    // @Test
-    // public void createRoom_badRequest_400() {
-    //
-    // given()
-    // .log()
-    // .all()
-    // .header("Content-Type", "application/json")
-    // .when().post("/room")
-    // .then()
-    // .statusCode(400);
-    // }
-
     // TODO: Search available room list
     // Case not found
     // #1 Overlap start
